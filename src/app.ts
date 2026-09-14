@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import homePageRoutes from "./routes/homePage.routes.ts";
 import spacesPageRoutes from "./routes/spacesPage.routes.ts";
+import spaceDetailPageRoutes from "./routes/spaceDetailPage.routes.ts";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(morgan("dev"));
  */
 app.use("/api/home-page", homePageRoutes);
 app.use("/api/spaces-page", spacesPageRoutes);
+app.use("/api/space-detail-page", spaceDetailPageRoutes);
 
 /**
  * Health Check
