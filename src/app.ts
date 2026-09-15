@@ -5,6 +5,10 @@ import morgan from "morgan";
 import homePageRoutes from "./routes/homePage.routes.ts";
 import spacesPageRoutes from "./routes/spacesPage.routes.ts";
 import spaceDetailPageRoutes from "./routes/spaceDetailPage.routes.ts";
+import projectPageRoutes from "./routes/projectPage.routes.ts";
+import projectDetailPageRoutes from "./routes/projectDetailPage.routes.ts";
+import authRoutes from "./routes/auth.routes.ts";
+import { authenticate, authorizeAdmin } from "./middlewares/auth.middleware.ts";
 
 const app = express();
 
@@ -27,11 +31,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 /**
- * Routes
+ * Auth Routes (public)
  */
-app.use("/api/home-page", homePageRoutes);
-app.use("/api/spaces-page", spacesPageRoutes);
-app.use("/api/space-detail-page", spaceDetailPageRoutes);
+app.use("/api/auth", authRoutes);
+
+/**
+ * Protected Page Routes (admin only)
+ */
+app.use("/api/home-page", authenticate, authorizeAdmin, homePageRoutes);
+app.use("/api/spaces-page", authenticate, authorizeAdmin, spacesPageRoutes);
+app.use("/api/space-detail-page", authenticate, authorizeAdmin, spaceDetailPageRoutes);
+app.use("/api/project-page", authenticate, authorizeAdmin, projectPageRoutes);
+app.use("/api/project-detail-page", authenticate, authorizeAdmin,  projectDetailPageRoutes);
 
 /**
  * Health Check
