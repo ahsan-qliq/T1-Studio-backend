@@ -7,8 +7,15 @@ import spacesPageRoutes from "./routes/spacesPage.routes.ts";
 import spaceDetailPageRoutes from "./routes/spaceDetailPage.routes.ts";
 import projectPageRoutes from "./routes/projectPage.routes.ts";
 import projectDetailPageRoutes from "./routes/projectDetailPage.routes.ts";
+import inspirationPageRoutes from "./routes/inspirationPage.routes.ts";
+import whyT1PageRoutes from "./routes/whyT1Page.routes.ts";
+import tradePageRoutes from "./routes/tradePage.routes.ts";
+import aboutPageRoutes from "./routes/aboutPage.routes.ts";
+import contactPageRoutes from "./routes/contactPage.routes.ts";
+import landingPageRoutes from "./routes/landingPage.routes.ts";
+import blogPageRoutes from "./routes/blogPage.routes.ts";
+import blogDetailPageRoutes from "./routes/blogDetailPage.routes.ts";
 import authRoutes from "./routes/auth.routes.ts";
-import { authenticate, authorizeAdmin } from "./middlewares/auth.middleware.ts";
 
 const app = express();
 
@@ -36,13 +43,21 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 
 /**
- * Protected Page Routes (admin only)
+ * Page Routes (GET public, POST/PATCH/DELETE admin only)
  */
-app.use("/api/home-page", authenticate, authorizeAdmin, homePageRoutes);
-app.use("/api/spaces-page", authenticate, authorizeAdmin, spacesPageRoutes);
-app.use("/api/space-detail-page", authenticate, authorizeAdmin, spaceDetailPageRoutes);
-app.use("/api/project-page", authenticate, authorizeAdmin, projectPageRoutes);
-app.use("/api/project-detail-page", authenticate, authorizeAdmin,  projectDetailPageRoutes);
+app.use("/api/home-page", homePageRoutes);
+app.use("/api/spaces-page", spacesPageRoutes);
+app.use("/api/space-detail-page", spaceDetailPageRoutes);
+app.use("/api/project-page", projectPageRoutes);
+app.use("/api/project-detail-page", projectDetailPageRoutes);
+app.use("/api/inspiration-page", inspirationPageRoutes);
+app.use("/api/why-t1-page", whyT1PageRoutes);
+app.use("/api/trade-page", tradePageRoutes);
+app.use("/api/about-page", aboutPageRoutes);
+app.use("/api/contact-page", contactPageRoutes);
+app.use("/api/landing-page", landingPageRoutes);
+app.use("/api/blog-page", blogPageRoutes);
+app.use("/api/blog-detail-page", blogDetailPageRoutes);
 
 /**
  * Health Check
