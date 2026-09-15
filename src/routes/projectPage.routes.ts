@@ -5,12 +5,13 @@ import {
   updateProjectPage,
   deleteProjectPage,
 } from "../controllers/projectPage.controller.ts";
+import { authenticate, authorizeAdmin } from "../middlewares/auth.middleware.ts";
 
 const router = Router();
 
-router.post("/", createProjectPage);
 router.get("/", getProjectPage);
-router.patch("/", updateProjectPage);
-router.delete("/", deleteProjectPage);
+router.post("/", authenticate, authorizeAdmin, createProjectPage);
+router.patch("/", authenticate, authorizeAdmin, updateProjectPage);
+router.delete("/", authenticate, authorizeAdmin, deleteProjectPage);
 
 export default router;
