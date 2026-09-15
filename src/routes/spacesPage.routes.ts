@@ -5,12 +5,13 @@ import {
   updateSpacesPage,
   deleteSpacesPage,
 } from "../controllers/spacesPage.controller.ts";
+import { authenticate, authorizeAdmin } from "../middlewares/auth.middleware.ts";
 
 const router = Router();
 
-router.post("/", createSpacesPage);
 router.get("/", getSpacesPage);
-router.patch("/", updateSpacesPage);
-router.delete("/", deleteSpacesPage);
+router.post("/", authenticate, authorizeAdmin, createSpacesPage);
+router.patch("/", authenticate, authorizeAdmin, updateSpacesPage);
+router.delete("/", authenticate, authorizeAdmin, deleteSpacesPage);
 
 export default router;
