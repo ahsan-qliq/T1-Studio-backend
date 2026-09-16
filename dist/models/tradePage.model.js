@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, } from "../shared/index.js";
-const { Schema } = mongoose;
 /* =========================================================
    01. HERO
 ========================================================= */
@@ -42,7 +41,155 @@ const heroSectionSchema = new Schema({
     },
 }, { _id: false });
 /* =========================================================
-   02. STATS
+   02. PARTNER / BRAND LOGOS
+========================================================= */
+const logoItemSchema = new Schema({
+    name: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    logo: {
+        type: imageSchema,
+        default: () => ({}),
+    },
+    href: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    openInNewTab: {
+        type: Boolean,
+        default: true,
+    },
+    isVisible: {
+        type: Boolean,
+        default: true,
+    },
+}, { _id: true });
+const logosSectionSchema = new Schema({
+    ...sectionSettings,
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    logos: {
+        type: [logoItemSchema],
+        default: [],
+    },
+}, { _id: false });
+/* =========================================================
+   03. WHO WE WORK WITH
+========================================================= */
+const partnerTypeItemSchema = new Schema({
+    key: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    title: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    image: {
+        type: imageSchema,
+        default: () => ({}),
+    },
+    href: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    isVisible: {
+        type: Boolean,
+        default: true,
+    },
+}, { _id: true });
+const whoWeWorkWithSectionSchema = new Schema({
+    ...sectionSettings,
+    eyebrow: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    items: {
+        type: [partnerTypeItemSchema],
+        default: [],
+    },
+    button: {
+        type: buttonSchema,
+        default: () => ({}),
+    },
+}, { _id: false });
+/* =========================================================
+   04. TRADE JOURNEY / PROCESS
+========================================================= */
+const journeyStepSchema = new Schema({
+    number: {
+        type: String,
+        default: "",
+    },
+    icon: {
+        type: String,
+        default: "",
+    },
+    title: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    subtitle: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    highlight: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    isVisible: {
+        type: Boolean,
+        default: true,
+    },
+}, { _id: true });
+const journeySectionSchema = new Schema({
+    ...sectionSettings,
+    eyebrow: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    steps: {
+        type: [journeyStepSchema],
+        default: [],
+    },
+}, { _id: false });
+/* =========================================================
+   05. STATS
 ========================================================= */
 const statItemSchema = new Schema({
     value: {
@@ -54,123 +201,48 @@ const statItemSchema = new Schema({
         type: localizedTextSchema,
         default: () => ({}),
     },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
     isVisible: {
         type: Boolean,
         default: true,
     },
-});
+}, { _id: true });
 const statsSectionSchema = new Schema({
     ...sectionSettings,
-    statistics: {
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    stats: {
         type: [statItemSchema],
         default: [],
     },
 }, { _id: false });
 /* =========================================================
-   03. SERVICES
-========================================================= */
-const serviceItemSchema = new Schema({
-    icon: {
-        type: String,
-        default: "",
-    },
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    href: {
-        type: String,
-        default: "",
-    },
-    isVisible: {
-        type: Boolean,
-        default: true,
-    },
-});
-const servicesSectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    services: {
-        type: [serviceItemSchema],
-        default: [],
-    },
-    button: {
-        type: buttonSchema,
-        default: () => ({}),
-    },
-}, { _id: false });
-/* =========================================================
-   04. FEATURED SPACES
-========================================================= */
-const featuredSpaceItemSchema = new Schema({
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    image: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    href: {
-        type: String,
-        default: "",
-    },
-    isVisible: {
-        type: Boolean,
-        default: true,
-    },
-});
-const featuredSpacesSectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    spaces: {
-        type: [featuredSpaceItemSchema],
-        default: [],
-    },
-    button: {
-        type: buttonSchema,
-        default: () => ({}),
-    },
-}, { _id: false });
-/* =========================================================
-   05. SIGNATURE PROJECTS
+   06. FEATURED / COMMERCIAL PROJECTS
 ========================================================= */
 const projectItemSchema = new Schema({
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
+    projectSlug: {
+        type: String,
+        default: "",
+        trim: true,
     },
-    description: {
+    title: {
         type: localizedTextSchema,
         default: () => ({}),
     },
     location: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    category: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
         type: localizedTextSchema,
         default: () => ({}),
     },
@@ -198,8 +270,8 @@ const projectItemSchema = new Schema({
         type: Boolean,
         default: true,
     },
-});
-const signatureProjectsSectionSchema = new Schema({
+}, { _id: true });
+const projectsSectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
         type: localizedTextSchema,
@@ -223,9 +295,9 @@ const signatureProjectsSectionSchema = new Schema({
     },
 }, { _id: false });
 /* =========================================================
-   06. PROCESS / JOURNEY
+   07. WHY PARTNER WITH T1 / BENEFITS
 ========================================================= */
-const journeyStepSchema = new Schema({
+const benefitItemSchema = new Schema({
     icon: {
         type: String,
         default: "",
@@ -234,23 +306,7 @@ const journeyStepSchema = new Schema({
         type: localizedTextSchema,
         default: () => ({}),
     },
-    subtitle: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
     description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    advantageTitle: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    advantageDescription: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    highlight: {
         type: localizedTextSchema,
         default: () => ({}),
     },
@@ -258,8 +314,8 @@ const journeyStepSchema = new Schema({
         type: Boolean,
         default: true,
     },
-});
-const journeySectionSchema = new Schema({
+}, { _id: true });
+const benefitsSectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
         type: localizedTextSchema,
@@ -272,195 +328,16 @@ const journeySectionSchema = new Schema({
     description: {
         type: localizedTextSchema,
         default: () => ({}),
-    },
-    steps: {
-        type: [journeyStepSchema],
-        default: [],
-    },
-}, { _id: false });
-/* =========================================================
-   07. WHY CHOOSE T1
-========================================================= */
-const comparisonItemSchema = new Schema({
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    available: {
-        type: Boolean,
-        default: true,
-    },
-}, { _id: false });
-const comparisonColumnSchema = new Schema({
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    highlighted: {
-        type: Boolean,
-        default: false,
     },
     items: {
-        type: [comparisonItemSchema],
-        default: [],
-    },
-});
-const whyChooseT1SectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    columns: {
-        type: [comparisonColumnSchema],
+        type: [benefitItemSchema],
         default: [],
     },
 }, { _id: false });
 /* =========================================================
-   08. TESTIMONIALS
+   08. PARTNERSHIP SERVICES
 ========================================================= */
-const testimonialItemSchema = new Schema({
-    clientName: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    designation: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    testimonial: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    image: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    videoUrl: {
-        type: String,
-        default: "",
-    },
-    isVisible: {
-        type: Boolean,
-        default: true,
-    },
-});
-const testimonialsSectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    testimonials: {
-        type: [testimonialItemSchema],
-        default: [],
-    },
-}, { _id: false });
-/* =========================================================
-   09. CONSULTATION CTA
-========================================================= */
-const formOptionSchema = new Schema({
-    value: {
-        type: String,
-        required: true,
-    },
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-}, { _id: false });
-const consultationFieldSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    placeholder: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    type: {
-        type: String,
-        enum: ["text", "email", "phone", "textarea", "number", "select"],
-        default: "text",
-    },
-    required: {
-        type: Boolean,
-        default: false,
-    },
-    options: {
-        type: [formOptionSchema],
-        default: [],
-    },
-});
-const consultationTabSchema = new Schema({
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    value: {
-        type: String,
-        default: "",
-    },
-});
-const consultationCTASectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    image: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    tabs: {
-        type: [consultationTabSchema],
-        default: [],
-    },
-    fields: {
-        type: [consultationFieldSchema],
-        default: [],
-    },
-    submitButtonLabel: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-}, { _id: false });
-/* =========================================================
-   10. PARTNERSHIP
-========================================================= */
-const partnershipStepSchema = new Schema({
+const serviceItemSchema = new Schema({
     icon: {
         type: String,
         default: "",
@@ -473,8 +350,17 @@ const partnershipStepSchema = new Schema({
         type: localizedTextSchema,
         default: () => ({}),
     },
-});
-const partnershipSectionSchema = new Schema({
+    href: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    isVisible: {
+        type: Boolean,
+        default: true,
+    },
+}, { _id: true });
+const partnershipServicesSectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
         type: localizedTextSchema,
@@ -488,12 +374,119 @@ const partnershipSectionSchema = new Schema({
         type: localizedTextSchema,
         default: () => ({}),
     },
-    image: {
-        type: imageSchema,
+    services: {
+        type: [serviceItemSchema],
+        default: [],
+    },
+}, { _id: false });
+/* =========================================================
+   09. INDUSTRY / TRADE SERVICES
+========================================================= */
+const industryServiceItemSchema = new Schema({
+    icon: {
+        type: String,
+        default: "",
+    },
+    title: {
+        type: localizedTextSchema,
         default: () => ({}),
     },
-    steps: {
-        type: [partnershipStepSchema],
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    href: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    isVisible: {
+        type: Boolean,
+        default: true,
+    },
+}, { _id: true });
+const industryServicesSectionSchema = new Schema({
+    ...sectionSettings,
+    eyebrow: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    items: {
+        type: [industryServiceItemSchema],
+        default: [],
+    },
+}, { _id: false });
+/* =========================================================
+   10. RESOURCE CENTER
+========================================================= */
+const resourceItemSchema = new Schema({
+    type: {
+        type: String,
+        enum: [
+            "brochure",
+            "catalogue",
+            "technical-document",
+            "guide",
+            "download",
+            "link",
+        ],
+        default: "download",
+    },
+    icon: {
+        type: String,
+        default: "",
+    },
+    title: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    fileUrl: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    href: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+    buttonLabel: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    isVisible: {
+        type: Boolean,
+        default: true,
+    },
+}, { _id: true });
+const resourcesSectionSchema = new Schema({
+    ...sectionSettings,
+    eyebrow: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    resources: {
+        type: [resourceItemSchema],
         default: [],
     },
     button: {
@@ -502,31 +495,9 @@ const partnershipSectionSchema = new Schema({
     },
 }, { _id: false });
 /* =========================================================
-   11. AWARDS & RECOGNITION
+   11. PREFERRED SUPPLIER CTA
 ========================================================= */
-const awardItemSchema = new Schema({
-    name: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    caption: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    logo: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    href: {
-        type: String,
-        default: "",
-    },
-    openInNewTab: {
-        type: Boolean,
-        default: true,
-    },
-});
-const awardsSectionSchema = new Schema({
+const supplierCTASectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
         type: localizedTextSchema,
@@ -540,15 +511,28 @@ const awardsSectionSchema = new Schema({
         type: localizedTextSchema,
         default: () => ({}),
     },
-    awards: {
-        type: [awardItemSchema],
+    image: {
+        type: imageSchema,
+        default: () => ({}),
+    },
+    benefits: {
+        type: [localizedTextSchema],
         default: [],
+    },
+    button: {
+        type: buttonSchema,
+        default: () => ({}),
     },
 }, { _id: false });
 /* =========================================================
-   12. DESIGN TIPS / INSIGHTS
+   12. DESIGN TIPS & INSIGHTS
 ========================================================= */
 const articleItemSchema = new Schema({
+    slug: {
+        type: String,
+        default: "",
+        trim: true,
+    },
     title: {
         type: localizedTextSchema,
         default: () => ({}),
@@ -557,11 +541,11 @@ const articleItemSchema = new Schema({
         type: localizedTextSchema,
         default: () => ({}),
     },
-    description: {
+    readTime: {
         type: localizedTextSchema,
         default: () => ({}),
     },
-    readTime: {
+    description: {
         type: localizedTextSchema,
         default: () => ({}),
     },
@@ -577,7 +561,7 @@ const articleItemSchema = new Schema({
         type: Boolean,
         default: true,
     },
-});
+}, { _id: true });
 const designTipsSectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
@@ -602,7 +586,126 @@ const designTipsSectionSchema = new Schema({
     },
 }, { _id: false });
 /* =========================================================
-   13. FAQ
+   13. REFERRAL PARTNERSHIP
+========================================================= */
+const referralStepSchema = new Schema({
+    icon: {
+        type: String,
+        default: "",
+    },
+    title: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+}, { _id: true });
+const referralSectionSchema = new Schema({
+    ...sectionSettings,
+    eyebrow: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    image: {
+        type: imageSchema,
+        default: () => ({}),
+    },
+    steps: {
+        type: [referralStepSchema],
+        default: [],
+    },
+    button: {
+        type: buttonSchema,
+        default: () => ({}),
+    },
+}, { _id: false });
+/* =========================================================
+   14. CONSULTATION / LEAD FORM
+========================================================= */
+const formOptionSchema = new Schema({
+    value: {
+        type: String,
+        required: true,
+    },
+    label: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+}, { _id: false });
+const formFieldSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    label: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    placeholder: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    type: {
+        type: String,
+        enum: [
+            "text",
+            "email",
+            "phone",
+            "number",
+            "textarea",
+            "select",
+        ],
+        default: "text",
+    },
+    required: {
+        type: Boolean,
+        default: false,
+    },
+    options: {
+        type: [formOptionSchema],
+        default: [],
+    },
+}, { _id: true });
+const consultationSectionSchema = new Schema({
+    ...sectionSettings,
+    eyebrow: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    heading: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    description: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    image: {
+        type: imageSchema,
+        default: () => ({}),
+    },
+    fields: {
+        type: [formFieldSchema],
+        default: [],
+    },
+    submitButtonLabel: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+}, { _id: false });
+/* =========================================================
+   15. FAQ
 ========================================================= */
 const faqItemSchema = new Schema({
     question: {
@@ -617,7 +720,7 @@ const faqItemSchema = new Schema({
         type: Boolean,
         default: true,
     },
-});
+}, { _id: true });
 const faqSectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
@@ -638,70 +741,59 @@ const faqSectionSchema = new Schema({
     },
 }, { _id: false });
 /* =========================================================
-   14. LOCATION / FEATURE LINKS
+   SEO
 ========================================================= */
-const linkItemSchema = new Schema({
-    label: {
+const seoSchema = new Schema({
+    metaTitle: {
         type: localizedTextSchema,
         default: () => ({}),
     },
-    href: {
+    metaDescription: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    keywords: {
+        en: {
+            type: [String],
+            default: [],
+        },
+        ar: {
+            type: [String],
+            default: [],
+        },
+    },
+    canonicalUrl: {
         type: String,
         default: "",
-        trim: true,
     },
-    openInNewTab: {
+    ogImage: {
+        type: imageSchema,
+        default: () => ({}),
+    },
+    noIndex: {
         type: Boolean,
         default: false,
     },
-});
-const linkColumnSchema = new Schema({
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    links: {
-        type: [linkItemSchema],
-        default: [],
-    },
-});
-const locationLinksSectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    columns: {
-        type: [linkColumnSchema],
-        default: [],
+    noFollow: {
+        type: Boolean,
+        default: false,
     },
 }, { _id: false });
 /* =========================================================
-   MAIN HOME PAGE
+   MAIN TRADE PAGE
 ========================================================= */
-const homePageSchema = new Schema({
+const tradePageSchema = new Schema({
     pageName: {
         type: String,
-        default: "Home",
+        default: "Trade",
         trim: true,
     },
     slug: {
         type: String,
-        default: "home",
+        default: "trade",
         unique: true,
         index: true,
+        trim: true,
     },
     status: {
         type: String,
@@ -713,58 +805,66 @@ const homePageSchema = new Schema({
             type: heroSectionSchema,
             default: () => ({}),
         },
-        stats: {
-            type: statsSectionSchema,
+        logos: {
+            type: logosSectionSchema,
             default: () => ({}),
         },
-        services: {
-            type: servicesSectionSchema,
-            default: () => ({}),
-        },
-        featuredSpaces: {
-            type: featuredSpacesSectionSchema,
-            default: () => ({}),
-        },
-        signatureProjects: {
-            type: signatureProjectsSectionSchema,
+        whoWeWorkWith: {
+            type: whoWeWorkWithSectionSchema,
             default: () => ({}),
         },
         journey: {
             type: journeySectionSchema,
             default: () => ({}),
         },
-        whyChooseT1: {
-            type: whyChooseT1SectionSchema,
+        stats: {
+            type: statsSectionSchema,
             default: () => ({}),
         },
-        testimonials: {
-            type: testimonialsSectionSchema,
+        projects: {
+            type: projectsSectionSchema,
             default: () => ({}),
         },
-        consultationCTA: {
-            type: consultationCTASectionSchema,
+        benefits: {
+            type: benefitsSectionSchema,
             default: () => ({}),
         },
-        partnership: {
-            type: partnershipSectionSchema,
+        partnershipServices: {
+            type: partnershipServicesSectionSchema,
             default: () => ({}),
         },
-        awardsRecognition: {
-            type: awardsSectionSchema,
+        industryServices: {
+            type: industryServicesSectionSchema,
+            default: () => ({}),
+        },
+        resources: {
+            type: resourcesSectionSchema,
+            default: () => ({}),
+        },
+        supplierCTA: {
+            type: supplierCTASectionSchema,
             default: () => ({}),
         },
         designTips: {
             type: designTipsSectionSchema,
             default: () => ({}),
         },
+        referral: {
+            type: referralSectionSchema,
+            default: () => ({}),
+        },
+        consultation: {
+            type: consultationSectionSchema,
+            default: () => ({}),
+        },
         faq: {
             type: faqSectionSchema,
             default: () => ({}),
         },
-        locationLinks: {
-            type: locationLinksSectionSchema,
-            default: () => ({}),
-        },
+    },
+    seo: {
+        type: seoSchema,
+        default: () => ({}),
     },
     publishedAt: {
         type: Date,
@@ -773,5 +873,5 @@ const homePageSchema = new Schema({
 }, {
     timestamps: true,
 });
-const HomePage = mongoose.model("HomePage", homePageSchema);
-export default HomePage;
+const TradePage = mongoose.model("TradePage", tradePageSchema);
+export default TradePage;

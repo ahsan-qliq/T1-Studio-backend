@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { createSpacesPage, getSpacesPage, updateSpacesPage, deleteSpacesPage, } from "../controllers/spacesPage.controller.js";
+import { authenticate, authorizeAdmin } from "../middlewares/auth.middleware.js";
 const router = Router();
-router.post("/", createSpacesPage);
 router.get("/", getSpacesPage);
-router.patch("/", updateSpacesPage);
-router.delete("/", deleteSpacesPage);
+router.post("/", authenticate, authorizeAdmin, createSpacesPage);
+router.patch("/", authenticate, authorizeAdmin, updateSpacesPage);
+router.delete("/", authenticate, authorizeAdmin, deleteSpacesPage);
 export default router;
