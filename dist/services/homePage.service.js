@@ -17,13 +17,9 @@ export const getHomePageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    // Localize first if language is provided
-    const data = lang
-        ? localizeDocument(homePage, lang)
-        : homePage;
-    // Generate signed URLs for all images
-    const resolvedData = await resolveImageUrls(data);
-    return resolvedData;
+    const raw = homePage.toObject();
+    const data = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(data);
 };
 export const updateHomePageService = async (slug, data) => {
     const homePage = await HomePage.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });
