@@ -1,5 +1,6 @@
 import HomePage from "../models/homePage.model.js";
 import { localizeDocument } from "../utils/localizeDocument.js";
+import { resolveImageUrls } from "../utils/resolveImageUrls.js";
 export const createHomePageService = async (data) => {
     const existing = await HomePage.findOne({ slug: data.slug || "home" });
     if (existing) {
@@ -16,9 +17,13 @@ export const getHomePageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    if (!lang)
-        return homePage;
-    return localizeDocument(homePage.toObject(), lang);
+    // Localize first if language is provided
+    const data = lang
+        ? localizeDocument(homePage, lang)
+        : homePage;
+    // Generate signed URLs for all images
+    const resolvedData = await resolveImageUrls(data);
+    return resolvedData;
 };
 export const updateHomePageService = async (slug, data) => {
     const homePage = await HomePage.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });
