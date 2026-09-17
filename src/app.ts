@@ -16,6 +16,7 @@ import landingPageRoutes from "./routes/landingPage.routes.ts";
 import blogPageRoutes from "./routes/blogPage.routes.ts";
 import blogDetailPageRoutes from "./routes/blogDetailPage.routes.ts";
 import authRoutes from "./routes/auth.routes.ts";
+import uploadRoutes from "./routes/upload.routes.js";
 
 const app = express();
 
@@ -58,7 +59,7 @@ app.use("/api/contact-page", contactPageRoutes);
 app.use("/api/landing-page", landingPageRoutes);
 app.use("/api/blog-page", blogPageRoutes);
 app.use("/api/blog-detail-page", blogDetailPageRoutes);
-
+app.use("/api/uploads", uploadRoutes);
 /**
  * Health Check
  */
