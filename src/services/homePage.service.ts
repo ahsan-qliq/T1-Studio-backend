@@ -21,7 +21,7 @@ export const getHomePageService = async (slug: string, lang?: "en" | "ar") => {
     throw error;
   }
 
-  const raw = homePage.toObject();
+  const raw = JSON.parse(JSON.stringify(homePage.toObject()));
 
   const data = lang ? localizeDocument(raw, lang) : raw;
 
