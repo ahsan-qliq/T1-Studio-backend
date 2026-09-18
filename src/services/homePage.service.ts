@@ -21,15 +21,11 @@ export const getHomePageService = async (slug: string, lang?: "en" | "ar") => {
     throw error;
   }
 
-  // Localize first if language is provided
-  const data = lang
-    ? localizeDocument(homePage, lang)
-    : homePage;
+  const raw = homePage.toObject();
 
-  // Generate signed URLs for all images
-  const resolvedData = await resolveImageUrls(data);
+  const data = lang ? localizeDocument(raw, lang) : raw;
 
-  return resolvedData;
+  return resolveImageUrls(data);
 };
 
 export const updateHomePageService = async (slug: string, data: Record<string, unknown>) => {
