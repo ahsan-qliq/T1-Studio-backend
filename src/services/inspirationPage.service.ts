@@ -1,5 +1,6 @@
 import InspirationPage from "../models/inspirationPage.model.ts";
 import { localizeDocument } from "../utils/localizeDocument.ts";
+import { resolveImageUrls } from "../utils/resolveImageUrls.ts";
 
 export const createInspirationPageService = async (data: Record<string, unknown>) => {
   const existing = await InspirationPage.findOne({ slug: data.slug as string });
@@ -20,9 +21,9 @@ export const getInspirationPageService = async (slug: string, lang?: "en" | "ar"
     throw error;
   }
 
-  if (!lang) return page;
-
-  return localizeDocument(page.toObject(), lang);
+  const raw = JSON.parse(JSON.stringify(page.toObject()));
+  const data = lang ? localizeDocument(raw, lang) : raw;
+  return resolveImageUrls(data);
 };
 
 export const updateInspirationPageService = async (slug: string, data: Record<string, unknown>) => {

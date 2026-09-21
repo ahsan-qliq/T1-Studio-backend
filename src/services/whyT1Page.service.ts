@@ -1,5 +1,6 @@
 import WhyT1Page from "../models/whyT1Page.model.ts";
 import { localizeDocument } from "../utils/localizeDocument.ts";
+import { resolveImageUrls } from "../utils/resolveImageUrls.ts";
 
 export const createWhyT1PageService = async (data: Record<string, unknown>) => {
   const existing = await WhyT1Page.findOne({ slug: data.slug as string });
@@ -20,9 +21,9 @@ export const getWhyT1PageService = async (slug: string, lang?: "en" | "ar") => {
     throw error;
   }
 
-  if (!lang) return page;
-
-  return localizeDocument(page.toObject(), lang);
+  const raw = JSON.parse(JSON.stringify(page.toObject()));
+  const data = lang ? localizeDocument(raw, lang) : raw;
+  return resolveImageUrls(data);
 };
 
 export const updateWhyT1PageService = async (slug: string, data: Record<string, unknown>) => {

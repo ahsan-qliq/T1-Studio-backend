@@ -1,5 +1,6 @@
 import ProjectDetailPage from "../models/projectDetailPage.model.ts";
 import { localizeDocument } from "../utils/localizeDocument.ts";
+import { resolveImageUrls } from "../utils/resolveImageUrls.ts";
 
 export const createProjectDetailPageService = async (data: Record<string, unknown>) => {
   const existing = await ProjectDetailPage.findOne({ slug: data.slug as string });
@@ -14,9 +15,11 @@ export const createProjectDetailPageService = async (data: Record<string, unknow
 
 export const getAllProjectDetailPagesService = async (lang?: "en" | "ar") => {
   const pages = await ProjectDetailPage.find();
-  if (!lang) return pages;
-
-  return pages.map((page) => localizeDocument(page.toObject(), lang));
+  return pages.map((page) => {
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const localized = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(localized);
+  });
 };
 
 export const getProjectDetailPageService = async (slug: string, lang?: "en" | "ar") => {
@@ -27,9 +30,9 @@ export const getProjectDetailPageService = async (slug: string, lang?: "en" | "a
     throw error;
   }
 
-  if (!lang) return page;
-
-  return localizeDocument(page.toObject(), lang);
+  const raw = JSON.parse(JSON.stringify(page.toObject()));
+  const data = lang ? localizeDocument(raw, lang) : raw;
+  return resolveImageUrls(data);
 };
 
 export const updateProjectDetailPageService = async (slug: string, data: Record<string, unknown>) => {

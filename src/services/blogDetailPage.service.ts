@@ -1,5 +1,6 @@
 import BlogPost from "../models/blogDetailPage.model.ts";
 import { localizeDocument } from "../utils/localizeDocument.ts";
+import { resolveImageUrls } from "../utils/resolveImageUrls.ts";
 
 export const createBlogDetailPageService = async (data: Record<string, unknown>) => {
   const existing = await BlogPost.findOne({ slug: data.slug as string });
@@ -22,9 +23,11 @@ export const getAllBlogDetailPagesService = async (
   if (isFeatured !== undefined) filter.isFeatured = isFeatured;
 
   const pages = await BlogPost.find(filter).sort({ publishedAt: -1 });
-  if (!lang) return pages;
-
-  return pages.map((page) => localizeDocument(page.toObject(), lang));
+  return pages.map((page) => {
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const localized = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(localized);
+  });
 };
 
 export const getBlogDetailPageService = async (slug: string, lang?: "en" | "ar") => {
@@ -35,9 +38,9 @@ export const getBlogDetailPageService = async (slug: string, lang?: "en" | "ar")
     throw error;
   }
 
-  if (!lang) return page;
-
-  return localizeDocument(page.toObject(), lang);
+  const raw = JSON.parse(JSON.stringify(page.toObject()));
+  const data = lang ? localizeDocument(raw, lang) : raw;
+  return resolveImageUrls(data);
 };
 
 export const updateBlogDetailPageService = async (slug: string, data: Record<string, unknown>) => {
