@@ -1,5 +1,6 @@
 import WhyT1Page from "../models/whyT1Page.model.js";
 import { localizeDocument } from "../utils/localizeDocument.js";
+import { resolveImageUrls } from "../utils/resolveImageUrls.js";
 export const createWhyT1PageService = async (data) => {
     const existing = await WhyT1Page.findOne({ slug: data.slug });
     if (existing) {
@@ -16,9 +17,9 @@ export const getWhyT1PageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    if (!lang)
-        return page;
-    return localizeDocument(page.toObject(), lang);
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const data = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(data);
 };
 export const updateWhyT1PageService = async (slug, data) => {
     const page = await WhyT1Page.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });

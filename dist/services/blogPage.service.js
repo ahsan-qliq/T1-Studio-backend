@@ -1,5 +1,6 @@
 import BlogPage from "../models/blogPage.model.js";
 import { localizeDocument } from "../utils/localizeDocument.js";
+import { resolveImageUrls } from "../utils/resolveImageUrls.js";
 export const createBlogPageService = async (data) => {
     const existing = await BlogPage.findOne({ slug: data.slug });
     if (existing) {
@@ -16,9 +17,9 @@ export const getBlogPageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    if (!lang)
-        return page;
-    return localizeDocument(page.toObject(), lang);
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const data = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(data);
 };
 export const updateBlogPageService = async (slug, data) => {
     const page = await BlogPage.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });

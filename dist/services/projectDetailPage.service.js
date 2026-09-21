@@ -1,5 +1,6 @@
 import ProjectDetailPage from "../models/projectDetailPage.model.js";
 import { localizeDocument } from "../utils/localizeDocument.js";
+import { resolveImageUrls } from "../utils/resolveImageUrls.js";
 export const createProjectDetailPageService = async (data) => {
     const existing = await ProjectDetailPage.findOne({ slug: data.slug });
     if (existing) {
@@ -11,9 +12,11 @@ export const createProjectDetailPageService = async (data) => {
 };
 export const getAllProjectDetailPagesService = async (lang) => {
     const pages = await ProjectDetailPage.find();
-    if (!lang)
-        return pages;
-    return pages.map((page) => localizeDocument(page.toObject(), lang));
+    return pages.map((page) => {
+        const raw = JSON.parse(JSON.stringify(page.toObject()));
+        const localized = lang ? localizeDocument(raw, lang) : raw;
+        return resolveImageUrls(localized);
+    });
 };
 export const getProjectDetailPageService = async (slug, lang) => {
     const page = await ProjectDetailPage.findOne({ slug });
@@ -22,9 +25,9 @@ export const getProjectDetailPageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    if (!lang)
-        return page;
-    return localizeDocument(page.toObject(), lang);
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const data = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(data);
 };
 export const updateProjectDetailPageService = async (slug, data) => {
     const page = await ProjectDetailPage.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });
