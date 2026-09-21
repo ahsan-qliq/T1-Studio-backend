@@ -1,5 +1,6 @@
 import SpacesPage from "../models/spacesPage.model.ts";
 import { localizeDocument } from "../utils/localizeDocument.ts";
+import { resolveImageUrls } from "../utils/resolveImageUrls.ts";
 
 export const createSpacesPageService = async (data: Record<string, unknown>) => {
   const existing = await SpacesPage.findOne({ slug: data.slug as string });
@@ -20,9 +21,9 @@ export const getSpacesPageService = async (slug: string, lang?: "en" | "ar") => 
     throw error;
   }
 
-  if (!lang) return page;
-
-  return localizeDocument(page.toObject(), lang);
+  const raw = JSON.parse(JSON.stringify(page.toObject()));
+  const data = lang ? localizeDocument(raw, lang) : raw;
+  return resolveImageUrls(data);
 };
 
 export const updateSpacesPageService = async (slug: string, data: Record<string, unknown>) => {
