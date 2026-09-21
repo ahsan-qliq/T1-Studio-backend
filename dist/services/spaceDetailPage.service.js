@@ -1,5 +1,6 @@
 import SpaceDetailPage from "../models/spaceDetailPage.model.js";
 import { localizeDocument } from "../utils/localizeDocument.js";
+import { resolveImageUrls } from "../utils/resolveImageUrls.js";
 export const createSpaceDetailPageService = async (data) => {
     const existing = await SpaceDetailPage.findOne({ slug: data.slug });
     if (existing) {
@@ -11,9 +12,11 @@ export const createSpaceDetailPageService = async (data) => {
 };
 export const getAllSpaceDetailPagesService = async (lang) => {
     const pages = await SpaceDetailPage.find();
-    if (!lang)
-        return pages;
-    return pages.map((page) => localizeDocument(page.toObject(), lang));
+    return pages.map((page) => {
+        const raw = JSON.parse(JSON.stringify(page.toObject()));
+        const localized = lang ? localizeDocument(raw, lang) : raw;
+        return resolveImageUrls(localized);
+    });
 };
 export const getSpaceDetailPageService = async (slug, lang) => {
     const page = await SpaceDetailPage.findOne({ slug });
@@ -22,9 +25,9 @@ export const getSpaceDetailPageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    if (!lang)
-        return page;
-    return localizeDocument(page.toObject(), lang);
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const data = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(data);
 };
 export const updateSpaceDetailPageService = async (slug, data) => {
     const page = await SpaceDetailPage.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });
