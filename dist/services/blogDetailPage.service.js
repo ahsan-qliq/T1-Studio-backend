@@ -1,5 +1,6 @@
 import BlogPost from "../models/blogDetailPage.model.js";
 import { localizeDocument } from "../utils/localizeDocument.js";
+import { resolveImageUrls } from "../utils/resolveImageUrls.js";
 export const createBlogDetailPageService = async (data) => {
     const existing = await BlogPost.findOne({ slug: data.slug });
     if (existing) {
@@ -16,9 +17,11 @@ export const getAllBlogDetailPagesService = async (lang, category, isFeatured) =
     if (isFeatured !== undefined)
         filter.isFeatured = isFeatured;
     const pages = await BlogPost.find(filter).sort({ publishedAt: -1 });
-    if (!lang)
-        return pages;
-    return pages.map((page) => localizeDocument(page.toObject(), lang));
+    return pages.map((page) => {
+        const raw = JSON.parse(JSON.stringify(page.toObject()));
+        const localized = lang ? localizeDocument(raw, lang) : raw;
+        return resolveImageUrls(localized);
+    });
 };
 export const getBlogDetailPageService = async (slug, lang) => {
     const page = await BlogPost.findOne({ slug });
@@ -27,9 +30,9 @@ export const getBlogDetailPageService = async (slug, lang) => {
         error.statusCode = 404;
         throw error;
     }
-    if (!lang)
-        return page;
-    return localizeDocument(page.toObject(), lang);
+    const raw = JSON.parse(JSON.stringify(page.toObject()));
+    const data = lang ? localizeDocument(raw, lang) : raw;
+    return resolveImageUrls(data);
 };
 export const updateBlogDetailPageService = async (slug, data) => {
     const page = await BlogPost.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });
