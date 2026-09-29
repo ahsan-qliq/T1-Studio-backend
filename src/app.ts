@@ -17,6 +17,7 @@ import blogPageRoutes from "./routes/blogPage.routes.ts";
 import blogDetailPageRoutes from "./routes/blogDetailPage.routes.ts";
 import authRoutes from "./routes/auth.routes.ts";
 import uploadRoutes from "./routes/upload.routes.js";
+import zohoRoutes from "./routes/zoho.routes.ts";
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use("/api/landing-page", landingPageRoutes);
 app.use("/api/blog-page", blogPageRoutes);
 app.use("/api/blog-detail-page", blogDetailPageRoutes);
 app.use("/api/uploads", uploadRoutes);
+app.use("/api/zoho", zohoRoutes);
 /**
  * Health Check
  */
