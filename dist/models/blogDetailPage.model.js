@@ -1,510 +1,580 @@
-import mongoose, { Schema } from "mongoose";
-import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, } from "../shared/index.js";
+import mongoose from "mongoose";
+
+import {
+  localizedTextSchema,
+  imageSchema,
+  buttonSchema,
+  sectionSettings,
+} from "../shared/index.js";
+
+const { Schema } = mongoose;
+
 /* =========================================================
-   AUTHOR
+   01. BREADCRUMBS
 ========================================================= */
-const authorSchema = new Schema({
-    name: {
-        type: localizedTextSchema,
-        default: () => ({}),
+
+const breadcrumbItemSchema = new Schema(
+  {
+    label: {
+      type: localizedTextSchema,
+      default: () => ({}),
     },
+
+    href: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   02. AUTHOR
+========================================================= */
+
+const authorSchema = new Schema(
+  {
+    name: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
     designation: {
-        type: localizedTextSchema,
-        default: () => ({}),
+      type: localizedTextSchema,
+      default: () => ({}),
     },
+
     bio: {
-        type: localizedTextSchema,
-        default: () => ({}),
+      type: localizedTextSchema,
+      default: () => ({}),
     },
+
     image: {
-        type: imageSchema,
-        default: () => ({}),
+      type: imageSchema,
+      default: () => ({}),
     },
-    linkedinUrl: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-    websiteUrl: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-}, {
-    _id: false,
-});
+  },
+  { _id: false },
+);
+
 /* =========================================================
-   ARTICLE CONTENT BLOCK
+   03. HERO
 ========================================================= */
-const contentBlockSchema = new Schema({
-    type: {
-        type: String,
-        enum: [
-            "heading",
-            "paragraph",
-            "image",
-            "gallery",
-            "quote",
-            "list",
-            "button",
-            "divider",
-        ],
-        required: true,
-    },
-    /* -----------------------------------------
-       Heading
-    ----------------------------------------- */
-    level: {
-        type: Number,
-        enum: [2, 3, 4, 5, 6],
-        default: 2,
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    /* -----------------------------------------
-       Paragraph / Quote
-    ----------------------------------------- */
-    content: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    /* -----------------------------------------
-       Single Image
-    ----------------------------------------- */
-    image: {
-        type: imageSchema,
-        default: undefined,
-    },
-    caption: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    /* -----------------------------------------
-       Gallery
-    ----------------------------------------- */
-    images: {
-        type: [imageSchema],
-        default: [],
-    },
-    /* -----------------------------------------
-       List
-    ----------------------------------------- */
-    listStyle: {
-        type: String,
-        enum: ["bullet", "number"],
-        default: "bullet",
-    },
-    listItems: {
-        type: [localizedTextSchema],
-        default: [],
-    },
-    /* -----------------------------------------
-       Button
-    ----------------------------------------- */
-    button: {
-        type: buttonSchema,
-        default: undefined,
-    },
-    /* -----------------------------------------
-       General
-    ----------------------------------------- */
-    isVisible: {
-        type: Boolean,
-        default: true,
-    },
-}, {
-    _id: true,
-});
-/* =========================================================
-   01. HERO / ARTICLE HEADER
-========================================================= */
-const breadcrumbItemSchema = new Schema({
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    href: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-}, { _id: false });
-const heroSectionSchema = new Schema({
+
+const heroSectionSchema = new Schema(
+  {
     ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    excerpt: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    backgroundImage: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    mobileImage: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    overlayOpacity: {
-        type: Number,
-        default: 40,
-        min: 0,
-        max: 100,
-    },
+
     breadcrumbs: {
-        type: [breadcrumbItemSchema],
-        default: undefined,
+      type: [breadcrumbItemSchema],
+      default: [],
     },
-}, {
-    _id: false,
-});
-/* =========================================================
-   02. ARTICLE CONTENT
-========================================================= */
-const articleContentSectionSchema = new Schema({
-    ...sectionSettings,
-    intro: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    blocks: {
-        type: [contentBlockSchema],
-        default: [],
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   FORM OPTION
-========================================================= */
-const formOptionSchema = new Schema({
-    value: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   FORM FIELD
-========================================================= */
-const formFieldSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    label: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    placeholder: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    type: {
-        type: String,
-        enum: [
-            "text",
-            "email",
-            "phone",
-            "number",
-            "textarea",
-            "select",
-        ],
-        default: "text",
-    },
-    required: {
-        type: Boolean,
-        default: false,
-    },
-    options: {
-        type: [formOptionSchema],
-        default: [],
-    },
-}, {
-    _id: true,
-});
-/* =========================================================
-   03. CONSULTATION CTA
-========================================================= */
-const consultationSectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    image: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    fields: {
-        type: [formFieldSchema],
-        default: [],
-    },
-    submitButtonLabel: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    successMessage: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   RELATED ARTICLE
-========================================================= */
-const relatedArticleSchema = new Schema({
-    blogSlug: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
+
     category: {
-        type: localizedTextSchema,
-        default: () => ({}),
+      type: localizedTextSchema,
+      default: () => ({}),
     },
-    readTime: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    image: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    href: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-    isVisible: {
-        type: Boolean,
-        default: true,
-    },
-}, {
-    _id: true,
-});
-/* =========================================================
-   04. RELATED ARTICLES
-========================================================= */
-const relatedArticlesSectionSchema = new Schema({
-    ...sectionSettings,
-    eyebrow: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
+
     heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
+      type: localizedTextSchema,
+      default: () => ({}),
     },
-    description: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    articles: {
-        type: [relatedArticleSchema],
-        default: [],
-    },
-    button: {
-        type: buttonSchema,
-        default: () => ({}),
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   05. AUTHOR SECTION
-========================================================= */
-const authorSectionSchema = new Schema({
-    ...sectionSettings,
-    heading: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    author: {
-        type: authorSchema,
-        default: () => ({}),
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   SEO
-========================================================= */
-const seoSchema = new Schema({
-    metaTitle: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    metaDescription: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    keywords: {
-        en: {
-            type: [String],
-            default: [],
-        },
-        ar: {
-            type: [String],
-            default: [],
-        },
-    },
-    canonicalUrl: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-    ogImage: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    noIndex: {
-        type: Boolean,
-        default: false,
-    },
-    noFollow: {
-        type: Boolean,
-        default: false,
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   MAIN BLOG POST
-========================================================= */
-const blogDetailPage = new Schema({
-    title: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    slug: {
-        type: String,
-        required: true,
-        unique: true,
-        index: true,
-        trim: true,
-    },
+
     excerpt: {
-        type: localizedTextSchema,
-        default: () => ({}),
+      type: localizedTextSchema,
+      default: () => ({}),
     },
-    category: {
-        type: String,
-        required: true,
-        trim: true,
-        index: true,
+
+    image: {
+      type: imageSchema,
+      default: () => ({}),
     },
-    categoryLabel: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    tags: {
-        en: {
-            type: [String],
-            default: [],
-        },
-        ar: {
-            type: [String],
-            default: [],
-        },
-    },
+
     author: {
-        type: authorSchema,
-        default: () => ({}),
+      type: authorSchema,
+      default: () => ({}),
     },
+
+    publishedDate: {
+      type: Date,
+      default: null,
+    },
+
+    updatedDate: {
+      type: Date,
+      default: null,
+    },
+
     readTime: {
-        type: localizedTextSchema,
-        default: () => ({}),
+      type: Number,
+      default: null,
+      min: 1,
     },
-    featuredImage: {
-        type: imageSchema,
-        default: () => ({}),
+
+    enableShare: {
+      type: Boolean,
+      default: true,
     },
+
+    overlayOpacity: {
+      type: Number,
+      default: 40,
+      min: 0,
+      max: 100,
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   04. STEP ITEM
+========================================================= */
+
+const stepItemSchema = new Schema(
+  {
+    title: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    description: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   05. TABLE
+========================================================= */
+
+const tableCellSchema = new Schema(
+  {
+    value: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+  },
+  { _id: false },
+);
+
+const tableRowSchema = new Schema(
+  {
+    cells: {
+      type: [tableCellSchema],
+      default: [],
+    },
+  },
+  { _id: false },
+);
+
+const tableSchema = new Schema(
+  {
+    headers: {
+      type: [tableCellSchema],
+      default: [],
+    },
+
+    rows: {
+      type: [tableRowSchema],
+      default: [],
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   06. FAQ
+========================================================= */
+
+const faqItemSchema = new Schema(
+  {
+    question: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    answer: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   07. ARTICLE CONTENT BLOCK
+========================================================= */
+
+const contentBlockSchema = new Schema(
+  {
+    type: {
+      type: String,
+      enum: [
+        "heading",
+        "paragraph",
+        "list",
+        "steps",
+        "table",
+        "faq",
+      ],
+      required: true,
+    },
+
+    anchorId: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    eyebrow: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    heading: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    headingLevel: {
+      type: Number,
+      enum: [2, 3],
+      default: 2,
+    },
+
+    /*
+      Markdown can be stored here.
+      Example:
+      "Read more about [T1 Studio](https://t1-studio.com/about-t1-studio/)"
+    */
+    content: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    listItems: {
+      type: [localizedTextSchema],
+      default: [],
+    },
+
+    ordered: {
+      type: Boolean,
+      default: false,
+    },
+
+    steps: {
+      type: [stepItemSchema],
+      default: [],
+    },
+
+    table: {
+      type: tableSchema,
+      default: () => ({}),
+    },
+
+    faqs: {
+      type: [faqItemSchema],
+      default: [],
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    _id: true,
+  },
+);
+
+/* =========================================================
+   08. ARTICLE CONTENT SECTION
+========================================================= */
+
+const articleContentSectionSchema = new Schema(
+  {
+    ...sectionSettings,
+
+    blocks: {
+      type: [contentBlockSchema],
+      default: [],
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   09. AUTHOR BIO
+========================================================= */
+
+const authorBioSectionSchema = new Schema(
+  {
+    ...sectionSettings,
+
+    eyebrow: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    heading: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    author: {
+      type: authorSchema,
+      default: () => ({}),
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   10. CTA
+========================================================= */
+
+const ctaSectionSchema = new Schema(
+  {
+    ...sectionSettings,
+
+    eyebrow: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    heading: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    /*
+      Supports Markdown links inside the CTA text.
+    */
+    description: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    button: {
+      type: buttonSchema,
+      default: () => ({}),
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   11. RELATED ARTICLES
+========================================================= */
+
+const relatedArticleItemSchema = new Schema(
+  {
+    title: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    category: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    description: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    readTime: {
+      type: Number,
+      default: null,
+      min: 1,
+    },
+
+    image: {
+      type: imageSchema,
+      default: () => ({}),
+    },
+
+    href: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { _id: false },
+);
+
+const relatedArticlesSectionSchema = new Schema(
+  {
+    ...sectionSettings,
+
+    eyebrow: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    heading: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    description: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    articles: {
+      type: [relatedArticleItemSchema],
+      default: [],
+    },
+
+    button: {
+      type: buttonSchema,
+      default: () => ({}),
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   12. SEO
+========================================================= */
+
+const seoSchema = new Schema(
+  {
+    metaTitle: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    metaDescription: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    keywords: {
+      type: [String],
+      default: [],
+    },
+
+    canonicalUrl: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    ogImage: {
+      type: imageSchema,
+      default: () => ({}),
+    },
+  },
+  { _id: false },
+);
+
+/* =========================================================
+   MAIN BLOG DETAIL PAGE
+========================================================= */
+
+const blogDetailPageSchema = new Schema(
+  {
+    pageName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      trim: true,
+      lowercase: true,
+    },
+
     status: {
-        type: String,
-        enum: [
-            "draft",
-            "published",
-            "archived",
-        ],
-        default: "draft",
+      type: String,
+      enum: ["draft", "published"],
+      default: "draft",
+      index: true,
     },
-    isFeatured: {
-        type: Boolean,
-        default: false,
-    },
+
     sections: {
-        hero: {
-            type: heroSectionSchema,
-            default: () => ({}),
-        },
-        articleContent: {
-            type: articleContentSectionSchema,
-            default: () => ({}),
-        },
-        consultation: {
-            type: consultationSectionSchema,
-            default: () => ({}),
-        },
-        relatedArticles: {
-            type: relatedArticlesSectionSchema,
-            default: () => ({}),
-        },
-        authorInfo: {
-            type: authorSectionSchema,
-            default: () => ({}),
-        },
-    },
-    seo: {
-        type: seoSchema,
+      hero: {
+        type: heroSectionSchema,
         default: () => ({}),
+      },
+
+      articleContent: {
+        type: articleContentSectionSchema,
+        default: () => ({}),
+      },
+
+      authorBio: {
+        type: authorBioSectionSchema,
+        default: () => ({}),
+      },
+
+      cta: {
+        type: ctaSectionSchema,
+        default: () => ({}),
+      },
+
+      relatedArticles: {
+        type: relatedArticlesSectionSchema,
+        default: () => ({}),
+      },
     },
+
+    seo: {
+      type: seoSchema,
+      default: () => ({}),
+    },
+
     publishedAt: {
-        type: Date,
-        default: null,
+      type: Date,
+      default: null,
     },
-}, {
+  },
+  {
     timestamps: true,
-});
+  },
+);
+
 /* =========================================================
    INDEXES
 ========================================================= */
-blogDetailPage.index({
-    category: 1,
-    status: 1,
-    publishedAt: -1,
+
+blogDetailPageSchema.index({
+  status: 1,
+  publishedAt: -1,
 });
-blogDetailPage.index({
-    isFeatured: 1,
-    status: 1,
-});
-const BlogPost = mongoose.model("BlogPost", blogDetailPage);
-export default BlogPost;
+
+/* =========================================================
+   MODEL
+========================================================= */
+
+const BlogDetailPage = mongoose.model(
+  "BlogDetailPage",
+  blogDetailPageSchema,
+);
+
+export default BlogDetailPage;
