@@ -14,6 +14,7 @@ export const getBlogDetailPage = async (req, res) => {
         const slug = req.query.slug;
         const lang = req.query.lang;
         const category = req.query.category;
+        const status = req.query.status;
         const isFeatured = req.query.isFeatured !== undefined
             ? req.query.isFeatured === "true"
             : undefined;
@@ -21,8 +22,12 @@ export const getBlogDetailPage = async (req, res) => {
             res.status(400).json({ success: false, message: "Invalid lang. Use 'en' or 'ar'" });
             return;
         }
+        if (status && !["draft", "published", "archived"].includes(status)) {
+            res.status(400).json({ success: false, message: "Invalid status. Use 'draft', 'published', or 'archived'" });
+            return;
+        }
         if (!slug) {
-            const pages = await getAllBlogDetailPagesService(lang, category, isFeatured);
+            const pages = await getAllBlogDetailPagesService(lang, category, isFeatured, status);
             res.status(200).json({ success: true, data: pages });
             return;
         }

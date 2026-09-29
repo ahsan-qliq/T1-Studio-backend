@@ -22,6 +22,7 @@ export const getBlogDetailPage = async (req: Request, res: Response) => {
     const slug = req.query.slug as string | undefined;
     const lang = req.query.lang as "en" | "ar" | undefined;
     const category = req.query.category as string | undefined;
+    const status = req.query.status as string | undefined;
     const isFeatured = req.query.isFeatured !== undefined
       ? req.query.isFeatured === "true"
       : undefined;
@@ -31,8 +32,13 @@ export const getBlogDetailPage = async (req: Request, res: Response) => {
       return;
     }
 
+    if (status && !["draft", "published", "archived"].includes(status)) {
+      res.status(400).json({ success: false, message: "Invalid status. Use 'draft', 'published', or 'archived'" });
+      return;
+    }
+
     if (!slug) {
-      const pages = await getAllBlogDetailPagesService(lang, category, isFeatured);
+      const pages = await getAllBlogDetailPagesService(lang, category, isFeatured, status);
       res.status(200).json({ success: true, data: pages });
       return;
     }
