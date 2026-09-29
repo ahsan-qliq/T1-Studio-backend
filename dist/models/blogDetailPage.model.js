@@ -120,6 +120,17 @@ const contentBlockSchema = new Schema({
 /* =========================================================
    01. HERO / ARTICLE HEADER
 ========================================================= */
+const breadcrumbItemSchema = new Schema({
+    label: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    href: {
+        type: String,
+        default: "",
+        trim: true,
+    },
+}, { _id: false });
 const heroSectionSchema = new Schema({
     ...sectionSettings,
     eyebrow: {
@@ -147,6 +158,10 @@ const heroSectionSchema = new Schema({
         default: 40,
         min: 0,
         max: 100,
+    },
+    breadcrumbs: {
+        type: [breadcrumbItemSchema],
+        default: undefined,
     },
 }, {
     _id: false,
