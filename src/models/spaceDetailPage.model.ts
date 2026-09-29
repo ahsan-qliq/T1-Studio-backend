@@ -26,6 +26,21 @@ export enum SpaceType {
    01. HERO SECTION
 ========================================================= */
 
+const breadcrumbItemSchema = new Schema(
+  {
+    label: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+    href: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+  },
+  { _id: false },
+);
+
 const heroSectionSchema = new Schema(
   {
     ...sectionSettings,
@@ -65,6 +80,11 @@ const heroSectionSchema = new Schema(
       default: 40,
       min: 0,
       max: 100,
+    },
+
+    breadcrumbs: {
+      type: [breadcrumbItemSchema],
+      default: undefined,
     },
   },
   { _id: false }
