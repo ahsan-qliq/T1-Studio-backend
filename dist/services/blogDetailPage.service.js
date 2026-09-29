@@ -10,12 +10,14 @@ export const createBlogDetailPageService = async (data) => {
     }
     return BlogPost.create(data);
 };
-export const getAllBlogDetailPagesService = async (lang, category, isFeatured) => {
+export const getAllBlogDetailPagesService = async (lang, category, isFeatured, status) => {
     const filter = {};
     if (category)
         filter.category = category;
     if (isFeatured !== undefined)
         filter.isFeatured = isFeatured;
+    if (status)
+        filter.status = status;
     const pages = await BlogPost.find(filter).sort({ publishedAt: -1 });
     return pages.map((page) => {
         const raw = JSON.parse(JSON.stringify(page.toObject()));
