@@ -16,11 +16,13 @@ export const createBlogDetailPageService = async (data: Record<string, unknown>)
 export const getAllBlogDetailPagesService = async (
   lang?: "en" | "ar",
   category?: string,
-  isFeatured?: boolean
+  isFeatured?: boolean,
+  status?: string
 ) => {
   const filter: Record<string, unknown> = {};
   if (category) filter.category = category;
   if (isFeatured !== undefined) filter.isFeatured = isFeatured;
+  if (status) filter.status = status;
 
   const pages = await BlogPost.find(filter).sort({ publishedAt: -1 });
   return pages.map((page) => {
