@@ -54,6 +54,20 @@ const authorSchema = new Schema(
    ARTICLE CONTENT BLOCK
 ========================================================= */
 
+const faqItemSchema = new Schema(
+  {
+    question: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+    answer: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+  },
+  { _id: false }
+);
+
 const contentBlockSchema = new Schema(
   {
     type: {
@@ -68,6 +82,8 @@ const contentBlockSchema = new Schema(
         "list",
         "button",
         "divider",
+        "table",
+        "faq",
       ],
 
       required: true,
@@ -142,6 +158,29 @@ const contentBlockSchema = new Schema(
     button: {
       type: buttonSchema,
       default: undefined,
+    },
+
+    /* -----------------------------------------
+       Table
+    ----------------------------------------- */
+
+    headers: {
+      type: [localizedTextSchema],
+      default: [],
+    },
+
+    rows: {
+      type: Schema.Types.Mixed,
+      default: [],
+    },
+
+    /* -----------------------------------------
+       FAQ
+    ----------------------------------------- */
+
+    faqItems: {
+      type: [faqItemSchema],
+      default: [],
     },
 
     /* -----------------------------------------
