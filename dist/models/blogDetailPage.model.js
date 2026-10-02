@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, } from "../shared/index.js";
+import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, seoSchema, } from "../shared/index.js";
 /* =========================================================
    AUTHOR
 ========================================================= */
@@ -36,6 +36,16 @@ const authorSchema = new Schema({
 /* =========================================================
    ARTICLE CONTENT BLOCK
 ========================================================= */
+const faqItemSchema = new Schema({
+    question: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    answer: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+}, { _id: false });
 const contentBlockSchema = new Schema({
     type: {
         type: String,
@@ -48,6 +58,8 @@ const contentBlockSchema = new Schema({
             "list",
             "button",
             "divider",
+            "table",
+            "faq",
         ],
         required: true,
     },
@@ -106,6 +118,24 @@ const contentBlockSchema = new Schema({
     button: {
         type: buttonSchema,
         default: undefined,
+    },
+    /* -----------------------------------------
+       Table
+    ----------------------------------------- */
+    headers: {
+        type: [localizedTextSchema],
+        default: [],
+    },
+    rows: {
+        type: Schema.Types.Mixed,
+        default: [],
+    },
+    /* -----------------------------------------
+       FAQ
+    ----------------------------------------- */
+    faqItems: {
+        type: [faqItemSchema],
+        default: [],
     },
     /* -----------------------------------------
        General
@@ -351,48 +381,6 @@ const authorSectionSchema = new Schema({
     author: {
         type: authorSchema,
         default: () => ({}),
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   SEO
-========================================================= */
-const seoSchema = new Schema({
-    metaTitle: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    metaDescription: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    keywords: {
-        en: {
-            type: [String],
-            default: [],
-        },
-        ar: {
-            type: [String],
-            default: [],
-        },
-    },
-    canonicalUrl: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-    ogImage: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    noIndex: {
-        type: Boolean,
-        default: false,
-    },
-    noFollow: {
-        type: Boolean,
-        default: false,
     },
 }, {
     _id: false,
