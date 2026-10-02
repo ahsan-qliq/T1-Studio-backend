@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, } from "../shared/index.js";
+import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, seoSchema, } from "../shared/index.js";
 /* =========================================================
    01. HERO + PROJECT STATS
 ========================================================= */
@@ -519,48 +519,6 @@ const consultationSectionSchema = new Schema({
     submitButtonLabel: {
         type: localizedTextSchema,
         default: () => ({}),
-    },
-}, {
-    _id: false,
-});
-/* =========================================================
-   SEO
-========================================================= */
-const seoSchema = new Schema({
-    metaTitle: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    metaDescription: {
-        type: localizedTextSchema,
-        default: () => ({}),
-    },
-    keywords: {
-        en: {
-            type: [String],
-            default: [],
-        },
-        ar: {
-            type: [String],
-            default: [],
-        },
-    },
-    canonicalUrl: {
-        type: String,
-        default: "",
-        trim: true,
-    },
-    ogImage: {
-        type: imageSchema,
-        default: () => ({}),
-    },
-    noIndex: {
-        type: Boolean,
-        default: false,
-    },
-    noFollow: {
-        type: Boolean,
-        default: false,
     },
 }, {
     _id: false,

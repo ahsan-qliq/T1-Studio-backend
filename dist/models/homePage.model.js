@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, } from "../shared/index.js";
+import { localizedTextSchema, imageSchema, buttonSchema, sectionSettings, seoSchema, } from "../shared/index.js";
 const { Schema } = mongoose;
 /* =========================================================
    01. HERO
@@ -780,6 +780,10 @@ const homePageSchema = new Schema({
             type: locationLinksSectionSchema,
             default: () => ({}),
         },
+    },
+    seo: {
+        type: seoSchema,
+        default: () => ({}),
     },
     publishedAt: {
         type: Date,
