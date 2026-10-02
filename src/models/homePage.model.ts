@@ -5,6 +5,7 @@ import {
   imageSchema,
   buttonSchema,
   sectionSettings,
+  seoSchema,
 } from "../shared/index.ts";
 
 
@@ -1023,6 +1024,11 @@ const homePageSchema = new Schema(
         type: locationLinksSectionSchema,
         default: () => ({}),
       },
+    },
+
+    seo: {
+      type: seoSchema,
+      default: () => ({}),
     },
 
     publishedAt: {
