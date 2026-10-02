@@ -5,6 +5,7 @@ import {
   imageSchema,
   buttonSchema,
   sectionSettings,
+  seoSchema,
 } from "../shared/index.ts";
 
 /* =========================================================
@@ -736,56 +737,6 @@ const consultationSectionSchema = new Schema(
   { _id: false }
 );
 
-/* =========================================================
-   SEO
-========================================================= */
-
-const seoSchema = new Schema(
-  {
-    metaTitle: {
-      type: localizedTextSchema,
-      default: () => ({}),
-    },
-
-    metaDescription: {
-      type: localizedTextSchema,
-      default: () => ({}),
-    },
-
-    keywords: {
-      en: {
-        type: [String],
-        default: [],
-      },
-
-      ar: {
-        type: [String],
-        default: [],
-      },
-    },
-
-    canonicalUrl: {
-      type: String,
-      default: "",
-    },
-
-    ogImage: {
-      type: imageSchema,
-      default: () => ({}),
-    },
-
-    noIndex: {
-      type: Boolean,
-      default: false,
-    },
-
-    noFollow: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  { _id: false }
-);
 
 /* =========================================================
    MAIN SPACE DETAIL PAGE
