@@ -91,9 +91,12 @@ const projectCardSchema = new Schema({
         default: () => ({}),
     },
     category: {
-        type: String,
-        default: "",
-        trim: true,
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
+    completionYear: {
+        type: localizedTextSchema,
+        default: null,
     },
     shortDescription: {
         type: localizedTextSchema,
