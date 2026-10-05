@@ -13,17 +13,61 @@ export const createProjectPageService = async (data: Record<string, unknown>) =>
   return ProjectPage.create(data);
 };
 
-export const getProjectPageService = async (slug: string, lang?: "en" | "ar") => {
+// export const getProjectPageService = async (slug: string, lang?: "en" | "ar") => {
+//   const page = await ProjectPage.findOne({ slug });
+//   if (!page) {
+//     const error = new Error("Project page not found") as Error & { statusCode: number };
+//     error.statusCode = 404;
+//     throw error;
+//   }
+
+//   const raw = JSON.parse(JSON.stringify(page.toObject()));
+//   const data = lang ? localizeDocument(raw, lang) : raw;
+//   return resolveImageUrls(data);
+// };
+
+export const getProjectPageService = async (
+  slug: string,
+  lang: "en" | "ar" = "en",
+) => {
   const page = await ProjectPage.findOne({ slug });
+
   if (!page) {
-    const error = new Error("Project page not found") as Error & { statusCode: number };
+    const error = new Error("Project page not found") as Error & {
+      statusCode: number;
+    };
+
     error.statusCode = 404;
     throw error;
   }
 
+  const [categories, locations, completionYears] = await Promise.all([
+    ProjectPage.distinct(`projects.category.${lang}`),
+    ProjectPage.distinct(`projects.location.${lang}`),
+    ProjectPage.distinct(`projects.completionYear.${lang}`),
+  ]);
+
+  console.log("categories", categories);
+  console.log("locations", locations);
+  console.log("years", completionYears);
+
   const raw = JSON.parse(JSON.stringify(page.toObject()));
-  const data = lang ? localizeDocument(raw, lang) : raw;
-  return resolveImageUrls(data);
+  const data = localizeDocument(raw, lang);
+  const resolvedData = resolveImageUrls(data);
+
+  return {
+    ...resolvedData,
+
+    filters: {
+      categories: categories.filter(Boolean).sort(),
+
+      locations: locations.filter(Boolean).sort(),
+
+      completionYears: completionYears
+        .filter(Boolean)
+        .sort((a, b) => Number(b) - Number(a)),
+    },
+  };
 };
 
 export const updateProjectPageService = async (slug: string, data: Record<string, unknown>) => {
