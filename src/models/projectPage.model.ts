@@ -75,7 +75,7 @@ const heroSectionSchema = new Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 /* =========================================================
@@ -102,7 +102,7 @@ const projectFilterSchema = new Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 /* =========================================================
@@ -131,6 +131,11 @@ const projectCardSchema = new Schema(
       type: String,
       default: "",
       trim: true,
+    },
+
+    completionYear: {
+      type: localizedTextSchema,
+      default: null,
     },
 
     shortDescription: {
@@ -174,7 +179,7 @@ const projectCardSchema = new Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 /* =========================================================
@@ -227,7 +232,7 @@ const projectsSectionSchema = new Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 /* =========================================================
@@ -269,7 +274,7 @@ const testimonialItemSchema = new Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 const testimonialsSectionSchema = new Schema(
@@ -303,7 +308,7 @@ const testimonialsSectionSchema = new Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 /* =========================================================
@@ -345,7 +350,7 @@ const beforeAfterItemSchema = new Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 const beforeAfterSectionSchema = new Schema(
@@ -384,7 +389,7 @@ const beforeAfterSectionSchema = new Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 /* =========================================================
@@ -410,7 +415,7 @@ const partnershipStepSchema = new Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 const partnershipSectionSchema = new Schema(
@@ -449,7 +454,7 @@ const partnershipSectionSchema = new Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 /* =========================================================
@@ -475,7 +480,7 @@ const faqItemSchema = new Schema(
   },
   {
     _id: true,
-  }
+  },
 );
 
 const faqSectionSchema = new Schema(
@@ -504,9 +509,8 @@ const faqSectionSchema = new Schema(
   },
   {
     _id: false,
-  }
+  },
 );
-
 
 /* =========================================================
    MAIN PROJECT PAGE
@@ -578,12 +582,9 @@ const projectPageSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const ProjectPage = mongoose.model(
-  "ProjectPage",
-  projectPageSchema
-);
+const ProjectPage = mongoose.model("ProjectPage", projectPageSchema);
 
 export default ProjectPage;
