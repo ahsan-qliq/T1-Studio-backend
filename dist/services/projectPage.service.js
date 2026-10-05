@@ -10,16 +10,49 @@ export const createProjectPageService = async (data) => {
     }
     return ProjectPage.create(data);
 };
-export const getProjectPageService = async (slug, lang) => {
+// export const getProjectPageService = async (slug: string, lang?: "en" | "ar") => {
+//   const page = await ProjectPage.findOne({ slug });
+//   if (!page) {
+//     const error = new Error("Project page not found") as Error & { statusCode: number };
+//     error.statusCode = 404;
+//     throw error;
+//   }
+//   const raw = JSON.parse(JSON.stringify(page.toObject()));
+//   const data = lang ? localizeDocument(raw, lang) : raw;
+//   return resolveImageUrls(data);
+// };
+export const getProjectPageService = async (slug, lang = "en") => {
     const page = await ProjectPage.findOne({ slug });
     if (!page) {
         const error = new Error("Project page not found");
         error.statusCode = 404;
         throw error;
     }
+    const [categories, locations, completionYears] = await Promise.all([
+        ProjectPage.distinct(`sections.projects.projects.category.${lang}`, { slug }),
+        ProjectPage.distinct(`sections.projects.projects.location.${lang}`, { slug }),
+        ProjectPage.distinct(`sections.projects.projects.completionYear.${lang}`, { slug }),
+    ]);
+    console.log("categories", categories);
+    console.log("locations", locations);
+    console.log("completionYears", completionYears);
     const raw = JSON.parse(JSON.stringify(page.toObject()));
-    const data = lang ? localizeDocument(raw, lang) : raw;
-    return resolveImageUrls(data);
+    const data = localizeDocument(raw, lang);
+    const resolvedData = resolveImageUrls(data);
+    return {
+        ...resolvedData,
+        filters: {
+            categories: categories
+                .filter(Boolean)
+                .sort(),
+            locations: locations
+                .filter(Boolean)
+                .sort(),
+            completionYears: completionYears
+                .filter(Boolean)
+                .sort((a, b) => Number(b) - Number(a)),
+        },
+    };
 };
 export const updateProjectPageService = async (slug, data) => {
     const page = await ProjectPage.findOneAndUpdate({ slug }, { $set: data }, { new: true, runValidators: true });
