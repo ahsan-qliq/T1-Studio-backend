@@ -42,14 +42,25 @@ export const getProjectPageService = async (
   }
 
   const [categories, locations, completionYears] = await Promise.all([
-    ProjectPage.distinct(`projects.category.${lang}`),
-    ProjectPage.distinct(`projects.location.${lang}`),
-    ProjectPage.distinct(`projects.completionYear.${lang}`),
+    ProjectPage.distinct(
+      `sections.projects.projects.category.${lang}`,
+      { slug },
+    ),
+
+    ProjectPage.distinct(
+      `sections.projects.projects.location.${lang}`,
+      { slug },
+    ),
+
+    ProjectPage.distinct(
+      `sections.projects.projects.completionYear.${lang}`,
+      { slug },
+    ),
   ]);
 
   console.log("categories", categories);
   console.log("locations", locations);
-  console.log("years", completionYears);
+  console.log("completionYears", completionYears);
 
   const raw = JSON.parse(JSON.stringify(page.toObject()));
   const data = localizeDocument(raw, lang);
@@ -59,9 +70,13 @@ export const getProjectPageService = async (
     ...resolvedData,
 
     filters: {
-      categories: categories.filter(Boolean).sort(),
+      categories: categories
+        .filter(Boolean)
+        .sort(),
 
-      locations: locations.filter(Boolean).sort(),
+      locations: locations
+        .filter(Boolean)
+        .sort(),
 
       completionYears: completionYears
         .filter(Boolean)
