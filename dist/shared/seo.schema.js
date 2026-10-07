@@ -38,4 +38,14 @@ export const seoSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    schema: {
+        en: {
+            type: Schema.Types.Mixed,
+            default: null,
+        },
+        ar: {
+            type: Schema.Types.Mixed,
+            default: null,
+        },
+    },
 }, { _id: false });
