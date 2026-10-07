@@ -100,6 +100,10 @@ const overviewSectionSchema = new Schema({
         enum: ["left", "right"],
         default: "right",
     },
+    challenge: {
+        type: localizedTextSchema,
+        default: () => ({}),
+    },
 }, {
     _id: false,
 });

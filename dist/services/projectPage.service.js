@@ -21,23 +21,21 @@ export const createProjectPageService = async (data) => {
 //   const data = lang ? localizeDocument(raw, lang) : raw;
 //   return resolveImageUrls(data);
 // };
-export const getProjectPageService = async (slug, lang = "en") => {
+export const getProjectPageService = async (slug, lang) => {
     const page = await ProjectPage.findOne({ slug });
     if (!page) {
         const error = new Error("Project page not found");
         error.statusCode = 404;
         throw error;
     }
+    const filterLang = lang ?? "en";
     const [categories, locations, completionYears] = await Promise.all([
-        ProjectPage.distinct(`sections.projects.projects.category.${lang}`, { slug }),
-        ProjectPage.distinct(`sections.projects.projects.location.${lang}`, { slug }),
-        ProjectPage.distinct(`sections.projects.projects.completionYear.${lang}`, { slug }),
+        ProjectPage.distinct(`sections.projects.projects.category.${filterLang}`, { slug }),
+        ProjectPage.distinct(`sections.projects.projects.location.${filterLang}`, { slug }),
+        ProjectPage.distinct(`sections.projects.projects.completionYear.${filterLang}`, { slug }),
     ]);
-    console.log("categories", categories);
-    console.log("locations", locations);
-    console.log("completionYears", completionYears);
     const raw = JSON.parse(JSON.stringify(page.toObject()));
-    const data = localizeDocument(raw, lang);
+    const data = lang ? localizeDocument(raw, lang) : raw;
     const resolvedData = resolveImageUrls(data);
     return {
         ...resolvedData,
