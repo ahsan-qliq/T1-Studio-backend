@@ -5,10 +5,12 @@ import {
   updateBlogPageService,
   deleteBlogPageService,
 } from "../services/blogPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createBlogPage = async (req: Request, res: Response) => {
   try {
     const page = await createBlogPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateBlogPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateBlogPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteBlogPage = async (req: Request, res: Response) => {
     }
 
     await deleteBlogPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Blog page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
