@@ -1,7 +1,9 @@
 import { createBlogPageService, getBlogPageService, updateBlogPageService, deleteBlogPageService, } from "../services/blogPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createBlogPage = async (req, res) => {
     try {
         const page = await createBlogPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateBlogPage = async (req, res) => {
             return;
         }
         const page = await updateBlogPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteBlogPage = async (req, res) => {
             return;
         }
         await deleteBlogPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Blog page deleted successfully" });
     }
     catch (error) {

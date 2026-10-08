@@ -5,10 +5,12 @@ import {
   updateContactPageService,
   deleteContactPageService,
 } from "../services/contactPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createContactPage = async (req: Request, res: Response) => {
   try {
     const page = await createContactPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateContactPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateContactPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteContactPage = async (req: Request, res: Response) => {
     }
 
     await deleteContactPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Contact page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };

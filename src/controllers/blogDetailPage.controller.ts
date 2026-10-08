@@ -6,10 +6,12 @@ import {
   updateBlogDetailPageService,
   deleteBlogDetailPageService,
 } from "../services/blogDetailPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createBlogDetailPage = async (req: Request, res: Response) => {
   try {
     const page = await createBlogDetailPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -61,6 +63,7 @@ export const updateBlogDetailPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateBlogDetailPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -78,6 +81,7 @@ export const deleteBlogDetailPage = async (req: Request, res: Response) => {
     }
 
     await deleteBlogDetailPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Blog post deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };

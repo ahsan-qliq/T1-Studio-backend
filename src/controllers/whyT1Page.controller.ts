@@ -5,10 +5,12 @@ import {
   updateWhyT1PageService,
   deleteWhyT1PageService,
 } from "../services/whyT1Page.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createWhyT1Page = async (req: Request, res: Response) => {
   try {
     const page = await createWhyT1PageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateWhyT1Page = async (req: Request, res: Response) => {
     }
 
     const page = await updateWhyT1PageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteWhyT1Page = async (req: Request, res: Response) => {
     }
 
     await deleteWhyT1PageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Why T1 page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };

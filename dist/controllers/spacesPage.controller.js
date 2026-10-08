@@ -1,7 +1,9 @@
 import { createSpacesPageService, getSpacesPageService, updateSpacesPageService, deleteSpacesPageService, } from "../services/spacesPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createSpacesPage = async (req, res) => {
     try {
         const page = await createSpacesPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateSpacesPage = async (req, res) => {
             return;
         }
         const page = await updateSpacesPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteSpacesPage = async (req, res) => {
             return;
         }
         await deleteSpacesPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Spaces page deleted successfully" });
     }
     catch (error) {

@@ -6,10 +6,12 @@ import {
   updateProjectDetailPageService,
   deleteProjectDetailPageService,
 } from "../services/projectDetailPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createProjectDetailPage = async (req: Request, res: Response) => {
   try {
     const page = await createProjectDetailPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -51,6 +53,7 @@ export const updateProjectDetailPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateProjectDetailPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -68,6 +71,7 @@ export const deleteProjectDetailPage = async (req: Request, res: Response) => {
     }
 
     await deleteProjectDetailPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Project detail page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };

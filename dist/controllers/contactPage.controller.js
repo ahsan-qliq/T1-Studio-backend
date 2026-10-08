@@ -1,7 +1,9 @@
 import { createContactPageService, getContactPageService, updateContactPageService, deleteContactPageService, } from "../services/contactPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createContactPage = async (req, res) => {
     try {
         const page = await createContactPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateContactPage = async (req, res) => {
             return;
         }
         const page = await updateContactPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteContactPage = async (req, res) => {
             return;
         }
         await deleteContactPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Contact page deleted successfully" });
     }
     catch (error) {

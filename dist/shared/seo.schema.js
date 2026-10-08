@@ -38,7 +38,7 @@ export const seoSchema = new Schema({
         type: Boolean,
         default: false,
     },
-    schema: {
+    structuredData: {
         en: {
             type: Schema.Types.Mixed,
             default: null,
