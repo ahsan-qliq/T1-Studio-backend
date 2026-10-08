@@ -5,10 +5,12 @@ import {
   updateLandingPageService,
   deleteLandingPageService,
 } from "../services/landingPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createLandingPage = async (req: Request, res: Response) => {
   try {
     const page = await createLandingPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateLandingPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateLandingPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteLandingPage = async (req: Request, res: Response) => {
     }
 
     await deleteLandingPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Landing page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
