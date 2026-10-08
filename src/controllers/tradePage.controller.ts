@@ -5,10 +5,12 @@ import {
   updateTradePageService,
   deleteTradePageService,
 } from "../services/tradePage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createTradePage = async (req: Request, res: Response) => {
   try {
     const page = await createTradePageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateTradePage = async (req: Request, res: Response) => {
     }
 
     const page = await updateTradePageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteTradePage = async (req: Request, res: Response) => {
     }
 
     await deleteTradePageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Trade page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
