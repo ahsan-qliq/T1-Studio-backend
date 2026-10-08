@@ -5,10 +5,12 @@ import {
   updateInspirationPageService,
   deleteInspirationPageService,
 } from "../services/inspirationPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createInspirationPage = async (req: Request, res: Response) => {
   try {
     const page = await createInspirationPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateInspirationPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateInspirationPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteInspirationPage = async (req: Request, res: Response) => {
     }
 
     await deleteInspirationPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Inspiration page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
