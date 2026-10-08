@@ -1,7 +1,9 @@
 import { createInspirationPageService, getInspirationPageService, updateInspirationPageService, deleteInspirationPageService, } from "../services/inspirationPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createInspirationPage = async (req, res) => {
     try {
         const page = await createInspirationPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateInspirationPage = async (req, res) => {
             return;
         }
         const page = await updateInspirationPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteInspirationPage = async (req, res) => {
             return;
         }
         await deleteInspirationPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Inspiration page deleted successfully" });
     }
     catch (error) {

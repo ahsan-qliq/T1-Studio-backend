@@ -1,7 +1,9 @@
 import { createAboutPageService, getAboutPageService, updateAboutPageService, deleteAboutPageService, } from "../services/aboutPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createAboutPage = async (req, res) => {
     try {
         const page = await createAboutPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateAboutPage = async (req, res) => {
             return;
         }
         const page = await updateAboutPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteAboutPage = async (req, res) => {
             return;
         }
         await deleteAboutPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "About page deleted successfully" });
     }
     catch (error) {

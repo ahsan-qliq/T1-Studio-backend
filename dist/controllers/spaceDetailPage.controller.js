@@ -1,7 +1,9 @@
 import { createSpaceDetailPageService, getAllSpaceDetailPagesService, getSpaceDetailPageService, updateSpaceDetailPageService, deleteSpaceDetailPageService, } from "../services/spaceDetailPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createSpaceDetailPage = async (req, res) => {
     try {
         const page = await createSpaceDetailPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -38,6 +40,7 @@ export const updateSpaceDetailPage = async (req, res) => {
             return;
         }
         const page = await updateSpaceDetailPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -53,6 +56,7 @@ export const deleteSpaceDetailPage = async (req, res) => {
             return;
         }
         await deleteSpaceDetailPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Space detail page deleted successfully" });
     }
     catch (error) {

@@ -1,7 +1,9 @@
 import { createBlogDetailPageService, getAllBlogDetailPagesService, getBlogDetailPageService, updateBlogDetailPageService, deleteBlogDetailPageService, } from "../services/blogDetailPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createBlogDetailPage = async (req, res) => {
     try {
         const page = await createBlogDetailPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -47,6 +49,7 @@ export const updateBlogDetailPage = async (req, res) => {
             return;
         }
         const page = await updateBlogDetailPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -62,6 +65,7 @@ export const deleteBlogDetailPage = async (req, res) => {
             return;
         }
         await deleteBlogDetailPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Blog post deleted successfully" });
     }
     catch (error) {

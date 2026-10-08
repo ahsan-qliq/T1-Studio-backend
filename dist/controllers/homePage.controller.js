@@ -1,7 +1,9 @@
 import { createHomePageService, deleteHomePageService, getHomePageService, updateHomePageService } from "../services/homePage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createHomePage = async (req, res) => {
     try {
         const homePage = await createHomePageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: homePage });
     }
     catch (error) {
@@ -13,6 +15,7 @@ export const deleteHomePage = async (req, res) => {
     try {
         const slug = req.query.slug || "home";
         await deleteHomePageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Home page deleted successfully" });
     }
     catch (error) {
@@ -24,6 +27,7 @@ export const updateHomePage = async (req, res) => {
     try {
         const slug = req.query.slug || "home";
         const homePage = await updateHomePageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: homePage });
     }
     catch (error) {

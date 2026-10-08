@@ -1,7 +1,9 @@
 import { createProjectPageService, getProjectPageService, updateProjectPageService, deleteProjectPageService, } from "../services/projectPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createProjectPage = async (req, res) => {
     try {
         const page = await createProjectPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateProjectPage = async (req, res) => {
             return;
         }
         const page = await updateProjectPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteProjectPage = async (req, res) => {
             return;
         }
         await deleteProjectPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Project page deleted successfully" });
     }
     catch (error) {

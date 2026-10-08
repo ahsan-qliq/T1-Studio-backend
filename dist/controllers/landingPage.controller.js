@@ -1,7 +1,9 @@
 import { createLandingPageService, getLandingPageService, updateLandingPageService, deleteLandingPageService, } from "../services/landingPage.service.js";
+import { triggerRevalidation } from "../utils/revalidate.js";
 export const createLandingPage = async (req, res) => {
     try {
         const page = await createLandingPageService(req.body);
+        triggerRevalidation();
         res.status(201).json({ success: true, data: page });
     }
     catch (error) {
@@ -37,6 +39,7 @@ export const updateLandingPage = async (req, res) => {
             return;
         }
         const page = await updateLandingPageService(slug, req.body);
+        triggerRevalidation();
         res.status(200).json({ success: true, data: page });
     }
     catch (error) {
@@ -52,6 +55,7 @@ export const deleteLandingPage = async (req, res) => {
             return;
         }
         await deleteLandingPageService(slug);
+        triggerRevalidation();
         res.status(200).json({ success: true, message: "Landing page deleted successfully" });
     }
     catch (error) {
