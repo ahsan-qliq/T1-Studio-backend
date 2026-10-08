@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { createHomePageService, deleteHomePageService, getHomePageService, updateHomePageService } from "../services/homePage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createHomePage = async (req: Request, res: Response) => {
   try {
     const homePage = await createHomePageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: homePage });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -15,6 +17,7 @@ export const deleteHomePage = async (req: Request, res: Response) => {
   try {
     const slug = (req.query.slug as string) || "home";
     await deleteHomePageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Home page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -26,6 +29,7 @@ export const updateHomePage = async (req: Request, res: Response) => {
   try {
     const slug = (req.query.slug as string) || "home";
     const homePage = await updateHomePageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: homePage });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
