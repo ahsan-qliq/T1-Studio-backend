@@ -5,10 +5,12 @@ import {
   updateAboutPageService,
   deleteAboutPageService,
 } from "../services/aboutPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createAboutPage = async (req: Request, res: Response) => {
   try {
     const page = await createAboutPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateAboutPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateAboutPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteAboutPage = async (req: Request, res: Response) => {
     }
 
     await deleteAboutPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "About page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
