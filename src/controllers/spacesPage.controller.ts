@@ -5,10 +5,12 @@ import {
   updateSpacesPageService,
   deleteSpacesPageService,
 } from "../services/spacesPage.service.ts";
+import { triggerRevalidation } from "../utils/revalidate.ts";
 
 export const createSpacesPage = async (req: Request, res: Response) => {
   try {
     const page = await createSpacesPageService(req.body);
+    triggerRevalidation();
     res.status(201).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -49,6 +51,7 @@ export const updateSpacesPage = async (req: Request, res: Response) => {
     }
 
     const page = await updateSpacesPageService(slug, req.body);
+    triggerRevalidation();
     res.status(200).json({ success: true, data: page });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
@@ -66,6 +69,7 @@ export const deleteSpacesPage = async (req: Request, res: Response) => {
     }
 
     await deleteSpacesPageService(slug);
+    triggerRevalidation();
     res.status(200).json({ success: true, message: "Spaces page deleted successfully" });
   } catch (error: unknown) {
     const err = error as Error & { statusCode?: number };
