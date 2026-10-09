@@ -18,6 +18,8 @@ import blogDetailPageRoutes from "./routes/blogDetailPage.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import zohoRoutes from "./routes/zoho.routes.js";
+import contactSubmissionRoutes from "./routes/contactSubmission.routes.js";
+import tradeSubmissionRoutes from "./routes/tradeSubmission.routes.js";
 const app = express();
 /**
  * Middlewares
@@ -52,6 +54,8 @@ app.use("/api/blog-page", blogPageRoutes);
 app.use("/api/blog-detail-page", blogDetailPageRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/zoho", zohoRoutes);
+app.use("/api/contact-submissions", contactSubmissionRoutes);
+app.use("/api/trade-submissions", tradeSubmissionRoutes);
 /**
  * Health Check
  */
