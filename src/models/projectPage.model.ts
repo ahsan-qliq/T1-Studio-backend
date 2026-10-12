@@ -457,7 +457,124 @@ const partnershipSectionSchema = new Schema(
 );
 
 /* =========================================================
-   06. FAQ
+   06. STATS
+========================================================= */
+
+const statItemSchema = new Schema(
+  {
+    value: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    label: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    description: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { _id: true },
+);
+
+const statsSectionSchema = new Schema(
+  {
+    ...sectionSettings,
+
+    category: {
+      type: String,
+      enum: ["commercial", "retail"],
+      required: true,
+    },
+
+    heading: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    stats: {
+      type: [statItemSchema],
+      default: [],
+    },
+  },
+  { _id: true },
+);
+
+/* =========================================================
+   07. LOGOS
+========================================================= */
+
+const logoItemSchema = new Schema(
+  {
+    name: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    logo: {
+      type: imageSchema,
+      default: () => ({}),
+    },
+
+    href: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    openInNewTab: {
+      type: Boolean,
+      default: true,
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { _id: true },
+);
+
+const logosSectionSchema = new Schema(
+  {
+    ...sectionSettings,
+
+    category: {
+      type: String,
+      enum: ["commercial", "retail"],
+      required: true,
+    },
+
+    heading: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    description: {
+      type: localizedTextSchema,
+      default: () => ({}),
+    },
+
+    logos: {
+      type: [logoItemSchema],
+      default: [],
+    },
+  },
+  { _id: true },
+);
+
+/* =========================================================
+   08. FAQ
 ========================================================= */
 
 const faqItemSchema = new Schema(
@@ -561,6 +678,16 @@ const projectPageSchema = new Schema(
       partnership: {
         type: partnershipSectionSchema,
         default: () => ({}),
+      },
+
+      stats: {
+        type: [statsSectionSchema],
+        default: [],
+      },
+
+      logos: {
+        type: [logosSectionSchema],
+        default: [],
       },
 
       faq: {
