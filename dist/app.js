@@ -20,13 +20,28 @@ import uploadRoutes from "./routes/upload.routes.js";
 import zohoRoutes from "./routes/zoho.routes.js";
 import contactSubmissionRoutes from "./routes/contactSubmission.routes.js";
 import tradeSubmissionRoutes from "./routes/tradeSubmission.routes.js";
+import privacyPolicyPageRoutes from "./routes/privacyPolicyPage.routes.js";
+import termsConditionsPageRoutes from "./routes/termsConditionsPage.routes.js";
+import cookiePolicyPageRoutes from "./routes/cookiePolicyPage.routes.js";
+import accessibilityPageRoutes from "./routes/accessibilityPage.routes.js";
 const app = express();
 /**
  * Middlewares
  */
 app.use(helmet());
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error(`CORS: origin '${origin}' not allowed`));
+        }
+    },
     credentials: true,
 }));
 app.use(express.json());
@@ -56,6 +71,10 @@ app.use("/api/uploads", uploadRoutes);
 app.use("/api/zoho", zohoRoutes);
 app.use("/api/contact-submissions", contactSubmissionRoutes);
 app.use("/api/trade-submissions", tradeSubmissionRoutes);
+app.use("/api/privacy-policy-page", privacyPolicyPageRoutes);
+app.use("/api/terms-conditions-page", termsConditionsPageRoutes);
+app.use("/api/cookie-policy-page", cookiePolicyPageRoutes);
+app.use("/api/accessibility-page", accessibilityPageRoutes);
 /**
  * Health Check
  */
