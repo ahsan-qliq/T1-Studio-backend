@@ -20,6 +20,10 @@ import uploadRoutes from "./routes/upload.routes.js";
 import zohoRoutes from "./routes/zoho.routes.ts";
 import contactSubmissionRoutes from "./routes/contactSubmission.routes.ts";
 import tradeSubmissionRoutes from "./routes/tradeSubmission.routes.ts";
+import privacyPolicyPageRoutes from "./routes/privacyPolicyPage.routes.ts";
+import termsConditionsPageRoutes from "./routes/termsConditionsPage.routes.ts";
+import cookiePolicyPageRoutes from "./routes/cookiePolicyPage.routes.ts";
+import accessibilityPageRoutes from "./routes/accessibilityPage.routes.ts";
 
 const app = express();
 
@@ -77,6 +81,10 @@ app.use("/api/uploads", uploadRoutes);
 app.use("/api/zoho", zohoRoutes);
 app.use("/api/contact-submissions", contactSubmissionRoutes);
 app.use("/api/trade-submissions", tradeSubmissionRoutes);
+app.use("/api/privacy-policy-page", privacyPolicyPageRoutes);
+app.use("/api/terms-conditions-page", termsConditionsPageRoutes);
+app.use("/api/cookie-policy-page", cookiePolicyPageRoutes);
+app.use("/api/accessibility-page", accessibilityPageRoutes);
 /**
  * Health Check
  */
