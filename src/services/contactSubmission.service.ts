@@ -17,7 +17,7 @@ export interface CreateContactSubmissionInput {
   message?: string;
 }
 
-const DUPLICATE_WINDOW_MS = 60 * 1000; // 60 seconds
+const DUPLICATE_WINDOW_MS = 60 * 1000;
 
 export async function createContactSubmissionService(
   input: CreateContactSubmissionInput
