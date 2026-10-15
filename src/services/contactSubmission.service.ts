@@ -13,6 +13,7 @@ export interface CreateContactSubmissionInput {
   typeOfService?: string;
   timeline?: string;
   companyName?: string;
+  projectName?: string;
   message?: string;
 }
 
@@ -56,6 +57,7 @@ export async function createContactSubmissionService(
     email: input.email,
     phone: input.phone,
     company: input.companyName,
+    projectNaame: input.projectName,
     leadSource: "Website",
     description: [
       `Submission type: ${submissionTypeLabel[input.submissionType]}`,
