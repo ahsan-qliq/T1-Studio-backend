@@ -1,6 +1,6 @@
 import ContactSubmission from "../models/contactSubmission.model.js";
 import { createLeadService } from "./zoho.service.js";
-const DUPLICATE_WINDOW_MS = 60 * 1000; // 60 seconds
+const DUPLICATE_WINDOW_MS = 60 * 1000;
 export async function createContactSubmissionService(input) {
     // Prevent duplicate submissions within the window
     const recentCutoff = new Date(Date.now() - DUPLICATE_WINDOW_MS);
@@ -24,6 +24,7 @@ export async function createContactSubmissionService(input) {
         homeOwner: "Home Owner",
         apartmentOwner: "Apartment Owner",
         propertyDeveloper: "Property Developer",
+        resourceDownload: "Resource Download",
     };
     createLeadService({
         firstName: input.firstName,
