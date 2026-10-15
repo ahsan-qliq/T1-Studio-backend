@@ -1,8 +1,9 @@
 import mongoose, { Schema } from "mongoose";
+export const VALID_SUBMISSION_TYPES = ["homeOwner", "apartmentOwner", "propertyDeveloper", "resourceDownload"];
 const contactSubmissionSchema = new Schema({
     submissionType: {
         type: String,
-        enum: ["homeOwner", "apartmentOwner", "propertyDeveloper"],
+        enum: [...VALID_SUBMISSION_TYPES],
         required: true,
         index: true,
     },
