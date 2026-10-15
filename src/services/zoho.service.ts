@@ -16,6 +16,7 @@ export interface ZohoLeadInput {
   email: string;
   phone?: string;
   company?: string;
+  projectNaame?: string;
   leadSource?: string;
   description?: string;
 }
