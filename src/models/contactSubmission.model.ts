@@ -23,6 +23,7 @@ const contactSubmissionSchema = new Schema(
     timeline:      { type: String, default: "" },
 
     companyName: { type: String, default: "" },
+    projectName: { type: String, default: "" },
     message:     { type: String, default: "" },
 
     zohoLeadId:   { type: String, default: null },
