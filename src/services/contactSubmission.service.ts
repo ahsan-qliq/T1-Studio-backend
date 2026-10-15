@@ -49,6 +49,7 @@ export async function createContactSubmissionService(
     homeOwner: "Home Owner",
     apartmentOwner: "Apartment Owner",
     propertyDeveloper: "Property Developer",
+    resourceDownload: "Resource Download",
   };
 
   createLeadService({
