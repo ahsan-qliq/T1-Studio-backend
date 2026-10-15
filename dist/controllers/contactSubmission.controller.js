@@ -3,6 +3,7 @@ const VALID_SUBMISSION_TYPES = [
     "homeOwner",
     "apartmentOwner",
     "propertyDeveloper",
+    "resourceDownload",
 ];
 export const createContactSubmission = async (req, res) => {
     try {
