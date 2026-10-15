@@ -1,10 +1,5 @@
 import { createContactSubmissionService, listContactSubmissionsService, } from "../services/contactSubmission.service.js";
-const VALID_SUBMISSION_TYPES = [
-    "homeOwner",
-    "apartmentOwner",
-    "propertyDeveloper",
-    "resourceDownload",
-];
+import { VALID_SUBMISSION_TYPES } from "../models/contactSubmission.model.js";
 export const createContactSubmission = async (req, res) => {
     try {
         const { submissionType, firstName, lastName, email, phone, propertyType, spaceRequired, typeOfService, timeline, companyName, message, } = req.body;

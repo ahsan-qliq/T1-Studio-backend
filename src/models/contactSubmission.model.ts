@@ -1,13 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 
-export type ContactSubmissionType = "homeOwner" | "apartmentOwner" | "propertyDeveloper";
+export const VALID_SUBMISSION_TYPES = ["homeOwner", "apartmentOwner", "propertyDeveloper","resourceDownload"] as const;
+export type ContactSubmissionType = (typeof VALID_SUBMISSION_TYPES)[number];
 export type ZohoSyncStatus = "pending" | "synced" | "failed";
 
 const contactSubmissionSchema = new Schema(
   {
     submissionType: {
       type: String,
-      enum: ["homeOwner", "apartmentOwner", "propertyDeveloper"] as ContactSubmissionType[],
+      enum: [...VALID_SUBMISSION_TYPES],
       required: true,
       index: true,
     },

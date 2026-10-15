@@ -3,13 +3,9 @@ import {
   createContactSubmissionService,
   listContactSubmissionsService,
 } from "../services/contactSubmission.service.ts";
+import { VALID_SUBMISSION_TYPES } from "../models/contactSubmission.model.ts";
 import type { ContactSubmissionType } from "../models/contactSubmission.model.ts";
 
-const VALID_SUBMISSION_TYPES: ContactSubmissionType[] = [
-  "homeOwner",
-  "apartmentOwner",
-  "propertyDeveloper",
-];
 
 export const createContactSubmission = async (req: Request, res: Response) => {
   try {
