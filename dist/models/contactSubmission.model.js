@@ -15,6 +15,7 @@ const contactSubmissionSchema = new Schema({
     typeOfService: { type: String, default: "" },
     timeline: { type: String, default: "" },
     companyName: { type: String, default: "" },
+    projectName: { type: String, default: "" },
     message: { type: String, default: "" },
     zohoLeadId: { type: String, default: null },
     zohoStatus: { type: String, enum: ["pending", "synced", "failed"], default: "pending" },
