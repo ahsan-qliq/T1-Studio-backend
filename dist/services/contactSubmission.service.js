@@ -31,6 +31,7 @@ export async function createContactSubmissionService(input) {
         email: input.email,
         phone: input.phone,
         company: input.companyName,
+        projectNaame: input.projectName,
         leadSource: "Website",
         description: [
             `Submission type: ${submissionTypeLabel[input.submissionType]}`,
