@@ -158,6 +158,17 @@ const projectCardSchema = new Schema(
       default: false,
     },
 
+    hasInnerPage: {
+      type: Boolean,
+      default: false,
+    },
+
+    status: {
+      type: String,
+      enum: ["completed", "ongoing"],
+      default: "ongoing",
+    },
+
     position: {
       type: String,
       enum: [
